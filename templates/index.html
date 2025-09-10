@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ماسح المواقع الإسرائيلية</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-top: 50px;
+            padding: 30px;
+        }
+        .scan-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+        .result-item {
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .vulnerability-critical { border-left-color: #dc3545; }
+        .vulnerability-medium { border-left-color: #ffc107; }
+        .vulnerability-low { border-left-color: #28a745; }
+        .loading-spinner {
+            display: none;
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-container">
+            <div class="text-center mb-4">
+                <h1><i class="fas fa-search"></i> ماسح المواقع الإسرائيلية</h1>
+                <p class="text-muted">أداة متخصصة في فحص المواقع الإسرائيلية (.il) للثغرات الأمنية والملفات المخفية</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <!-- نموذج إدخال المواقع -->
+                    <div class="scan-card">
+                        <h5><i class="fas fa-link"></i> إضافة مواقع للمسح</h5>
+                        <div class="mb-3">
+                            <label class="form-label">قائمة المواقع الإسرائيلية:</label>
+                            <textarea class="form-control" id="urlsInput" rows="4" 
+                                placeholder="https://example.co.il
+https://test.gov.il
+https://company.org.il"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">نوع المسح:</label>
+                            <select class="form-select" id="scanType">
+                                <option value="all">مسح شامل (كل أنواع المسح)</option>
+                                <option value="domains">مسح النطاقات فقط</option>
+                                <option value="vulnerabilities">مسح الثغرات فقط</option>
+                                <option value="hidden_files">مسح الملفات المخفية فقط</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="startScan()">
+                            <i class="fas fa-play"></i> بدء المسح
+                        </button>
+                        <button class="btn btn-danger" onclick="stopScan()" style="display:none;" id="stopBtn">
+                            <i class="fas fa-stop"></i> إيقاف المسح
+                        </button>
+                    </div>
+
+                    <!-- شريط التقدم -->
+                    <div class="scan-card" id="progressCard" style="display:none;">
+                        <h5><i class="fas fa-spinner fa-spin"></i> جاري المسح...</h5>
+                        <div class="progress mb-2">
+                            <div class="progress-bar" role="progressbar" id="progressBar" style="width: 0%">0%</div>
+                        </div>
+                        <small class="text-muted" id="progressText">جاري التحضير...</small>
+                    </div>
+
+                    <!-- النتائج -->
+                    <div class="scan-card" id="resultsCard" style="display:none;">
+                        <h5><i class="fas fa-list"></i> نتائج المسح</h5>
+                        <div id="resultsContainer"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <!-- إحصائيات سريعة -->
+                    <div class="scan-card">
+                        <h5><i class="fas fa-chart-bar"></i> إحصائيات</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <small>المواقع الممسوحة</small>
+                                <h4 id="sitesCount">0</h4>
+                            </div>
+                            <div class="col-6">
+                                <small>الثغرات المكتشفة</small>
+                                <h4 id="vulnsCount">0</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- أدوات سريعة -->
+                    <div class="scan-card">
+                        <h5><i class="fas fa-tools"></i> أدوات سريعة</h5>
+                        <button class="btn btn-outline-primary w-100 mb-2" onclick="loadDomains()">
+                            <i class="fas fa-search"></i> استكشاف نطاقات جديدة
+                        </button>
+                        <button class="btn btn-outline-success w-100 mb-2" onclick="downloadReport()">
+                            <i class="fas fa-download"></i> تحميل التقرير
+                        </button>
+                        <button class="btn btn-outline-secondary w-100" onclick="clearResults()">
+                            <i class="fas fa-trash"></i> مسح النتائج
+                        </button>
+                    </div>
+
+                    <!-- قائمة النطاقات -->
+                    <div class="scan-card">
+                        <h5><i class="fas fa-globe"></i> نطاقات إسرائيلية</h5>
+                        <div id="domainsList" style="max-height: 200px; overflow-y: auto;">
+                            <small class="text-muted">اضغط على "استكشاف نطاقات جديدة" للحصول على قائمة</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let scanInterval;
+
+        async function startScan() {
+            const urls = document.getElementById('urlsInput').value.trim().split('\n').filter(url => url.trim());
+            const scanType = document.getElementById('scanType').value;
+
+            if (urls.length === 0) {
+                alert('الرجاء إدخال على الأقل عنوان URL واحد');
+                return;
+            }
+
+            const response = await fetch('/api/start_scan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ urls, scan_type: scanType })
+            });
+
+            if (response.ok) {
+                document.getElementById('progressCard').style.display = 'block';
+                document.getElementById('resultsCard').style.display = 'none';
+                document.getElementById('stopBtn').style.display = 'inline-block';
+                
+                scanInterval = setInterval(updateScanStatus, 2000);
+            } else {
+                const error = await response.json();
+                alert(error.error);
+            }
+        }
+
+        async function stopScan() {
+            await fetch('/api/stop_scan', { method: 'POST' });
+            clearInterval(scanInterval);
+            document.getElementById('stopBtn').style.display = 'none';
+        }
+
+        async function updateScanStatus() {
+            const response = await fetch('/api/scan_status');
+            const status = await response.json();
+
+            if (!status.is_running) {
+                clearInterval(scanInterval);
+                document.getElementById('stopBtn').style.display = 'none';
+                loadResults();
+            }
+
+            document.getElementById('progressBar').style.width = status.progress + '%';
+            document.getElementById('progressBar').textContent = status.progress + '%';
+            document.getElementById('progressText').textContent = `تمت معالجة ${status.results.length} موقع`;
+        }
+
+        async function loadResults() {
+            const response = await fetch('/api/results');
+            const results = await response.json();
+            
+            displayResults(results);
+            updateStatistics(results);
+            
+            document.getElementById('progressCard').style.display = 'none';
+            document.getElementById('resultsCard').style.display = 'block';
+        }
+
+        function displayResults(results) {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '';
+
+            results.forEach(result => {
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                
+                let content = `<strong>${result.url || result.domain}</strong><br>`;
+                
+                if (result.vulnerabilities) {
+                    content += `<small>الثغرات: ${result.vulnerabilities.length}</small><br>`;
+                    result.vulnerabilities.forEach(vuln => {
+                        content += `<span class="badge bg-danger">${vuln.type}</span> `;
+                    });
+                }
+                
+                if (result.sensitive_files) {
+                    content += `<br><small>الملفات الحساسة: ${result.sensitive_files.length}</small>`;
+                }
+                
+                item.innerHTML = content;
+                container.appendChild(item);
+            });
+        }
+
+        function updateStatistics(results) {
+            document.getElementById('sitesCount').textContent = results.length;
+            
+            let vulnsCount = 0;
+            results.forEach(r => {
+                if (r.vulnerabilities) vulnsCount += r.vulnerabilities.length;
+            });
+            document.getElementById('vulnsCount').textContent = vulnsCount;
+        }
+
+        async function loadDomains() {
+            const response = await fetch('/api/domains');
+            const data = await response.json();
+            
+            const container = document.getElementById('domainsList');
+            container.innerHTML = '';
+            
+            data.domains.forEach(domain => {
+                const item = document.createElement('div');
+                item.innerHTML = `<small><i class="fas fa-globe"></i> ${domain}</small>`;
+                container.appendChild(item);
+            });
+        }
+
+        async function downloadReport() {
+            window.location.href = '/api/download_report';
+        }
+
+        function clearResults() {
+            document.getElementById('resultsContainer').innerHTML = '';
+            document.getElementById('resultsCard').style.display = 'none';
+            document.getElementById('sitesCount').textContent = '0';
+            document.getElementById('vulnsCount').textContent = '0';
+        }
+    </script>
+</body>
+</html>
