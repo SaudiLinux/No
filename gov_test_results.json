@@ -1,0 +1,31 @@
+{
+  "detailed_results": [
+    {
+      "results": [],
+      "tested_payloads": 3,
+      "vulnerabilities_found": 0,
+      "vulnerability_type": "xss"
+    },
+    {
+      "results": [],
+      "tested_payloads": 3,
+      "vulnerabilities_found": 0,
+      "vulnerability_type": "lfi"
+    },
+    {
+      "results": [],
+      "tested_payloads": 4,
+      "vulnerabilities_found": 0,
+      "vulnerability_type": "idor"
+    }
+  ],
+  "success": true,
+  "successful_exploits": [],
+  "summary": {
+    "failed_tests": 10,
+    "safe_mode": true,
+    "successful_exploits": 0,
+    "total_tests": 10
+  },
+  "target_url": "https://www.gov.il/ar"
+}

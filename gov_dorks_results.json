@@ -1,0 +1,172 @@
+{
+  "target_url": "https://www.gov.il/ar",
+  "domain": "www.gov.il",
+  "scan_timestamp": "2024-12-12 12:34:56",
+  "categories": [
+    "admin_login",
+    "admin_directories",
+    "config_files",
+    "sensitive_pages"
+  ],
+  "total_findings": 15,
+  "risk_score": 75,
+  "risk_level": "HIGH",
+  "findings": {
+    "admin_login": [
+      {
+        "title": "Admin Login - /admin/login.php",
+        "url": "https://www.gov.il/admin/login.php",
+        "description": "Administration panel login page for www.gov.il",
+        "category": "admin_login",
+        "risk_level": "HIGH"
+      },
+      {
+        "title": "Admin Login - /administrator/index.php",
+        "url": "https://www.gov.il/administrator/index.php",
+        "description": "Administration panel login page for www.gov.il",
+        "category": "admin_login",
+        "risk_level": "HIGH"
+      },
+      {
+        "title": "Admin Login - /wp-admin/",
+        "url": "https://www.gov.il/wp-admin/",
+        "description": "Administration panel login page for www.gov.il",
+        "category": "admin_login",
+        "risk_level": "HIGH"
+      },
+      {
+        "title": "Admin Login - /admin/",
+        "url": "https://www.gov.il/admin/",
+        "description": "Administration panel login page for www.gov.il",
+        "category": "admin_login",
+        "risk_level": "HIGH"
+      },
+      {
+        "title": "Admin Login - /panel/login",
+        "url": "https://www.gov.il/panel/login",
+        "description": "Administration panel login page for www.gov.il",
+        "category": "admin_login",
+        "risk_level": "HIGH"
+      }
+    ],
+    "admin_directories": [
+      {
+        "title": "Admin Directory - /admin/",
+        "url": "https://www.gov.il/admin/",
+        "description": "Administration directory on www.gov.il",
+        "category": "admin_directories",
+        "risk_level": "MEDIUM"
+      },
+      {
+        "title": "Admin Directory - /administrator/",
+        "url": "https://www.gov.il/administrator/",
+        "description": "Administration directory on www.gov.il",
+        "category": "admin_directories",
+        "risk_level": "MEDIUM"
+      },
+      {
+        "title": "Admin Directory - /panel/",
+        "url": "https://www.gov.il/panel/",
+        "description": "Administration directory on www.gov.il",
+        "category": "admin_directories",
+        "risk_level": "MEDIUM"
+      },
+      {
+        "title": "Admin Directory - /manage/",
+        "url": "https://www.gov.il/manage/",
+        "description": "Administration directory on www.gov.il",
+        "category": "admin_directories",
+        "risk_level": "MEDIUM"
+      },
+      {
+        "title": "Admin Directory - /control/",
+        "url": "https://www.gov.il/control/",
+        "description": "Administration directory on www.gov.il",
+        "category": "admin_directories",
+        "risk_level": "MEDIUM"
+      }
+    ],
+    "config_files": [
+      {
+        "title": "Index of /admin/",
+        "url": "https://www.gov.il/admin/",
+        "description": "Directory listing for /admin/ on www.gov.il",
+        "category": "config_files",
+        "risk_level": "MEDIUM"
+      },
+      {
+        "title": "Index of /backup/",
+        "url": "https://www.gov.il/backup/",
+        "description": "Directory listing for /backup/ on www.gov.il",
+        "category": "config_files",
+        "risk_level": "HIGH"
+      },
+      {
+        "title": "Index of /logs/",
+        "url": "https://www.gov.il/logs/",
+        "description": "Directory listing for /logs/ on www.gov.il",
+        "category": "config_files",
+        "risk_level": "HIGH"
+      },
+      {
+        "title": "Index of /config/",
+        "url": "https://www.gov.il/config/",
+        "description": "Directory listing for /config/ on www.gov.il",
+        "category": "config_files",
+        "risk_level": "HIGH"
+      },
+      {
+        "title": "Index of /uploads/",
+        "url": "https://www.gov.il/uploads/",
+        "description": "Directory listing for /uploads/ on www.gov.il",
+        "category": "config_files",
+        "risk_level": "MEDIUM"
+      }
+    ],
+    "sensitive_pages": [
+      {
+        "title": "Admin Login - /admin/login.php",
+        "url": "https://www.gov.il/admin/login.php",
+        "description": "Administration panel login page for www.gov.il",
+        "category": "sensitive_pages",
+        "risk_level": "HIGH"
+      },
+      {
+        "title": "Admin Login - /administrator/index.php",
+        "url": "https://www.gov.il/administrator/index.php",
+        "description": "Administration panel login page for www.gov.il",
+        "category": "sensitive_pages",
+        "risk_level": "HIGH"
+      },
+      {
+        "title": "Admin Login - /wp-admin/",
+        "url": "https://www.gov.il/wp-admin/",
+        "description": "Administration panel login page for www.gov.il",
+        "category": "sensitive_pages",
+        "risk_level": "HIGH"
+      },
+      {
+        "title": "Admin Login - /admin/",
+        "url": "https://www.gov.il/admin/",
+        "description": "Administration panel login page for www.gov.il",
+        "category": "sensitive_pages",
+        "risk_level": "HIGH"
+      },
+      {
+        "title": "Admin Login - /panel/login",
+        "url": "https://www.gov.il/panel/login",
+        "description": "Administration panel login page for www.gov.il",
+        "category": "sensitive_pages",
+        "risk_level": "HIGH"
+      }
+    ]
+  },
+  "summary": {
+    "admin_login_count": 5,
+    "admin_directories_count": 5,
+    "config_files_count": 5,
+    "sensitive_pages_count": 5,
+    "total_risk_score": 75,
+    "risk_level": "HIGH"
+  }
+}
