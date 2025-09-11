@@ -1,0 +1,25 @@
+[
+  {
+    "dns_records": {
+      "dns_records": {},
+      "domain": "israel",
+      "errors": [
+        "DNS A: The DNS query name does not exist: israel.",
+        "DNS AAAA: The DNS query name does not exist: israel.",
+        "DNS MX: The DNS query name does not exist: israel.",
+        "DNS NS: The DNS query name does not exist: israel.",
+        "DNS TXT: The DNS query name does not exist: israel.",
+        "DNS CNAME: The DNS query name does not exist: israel.",
+        "DNS SOA: The DNS query name does not exist: israel."
+      ],
+      "subdomains": []
+    },
+    "keyword": "israel",
+    "risk_assessment": {
+      "critical_issues": 0,
+      "risk_score": 0,
+      "total_vulnerabilities": 0
+    },
+    "vulnerabilities": []
+  }
+]
