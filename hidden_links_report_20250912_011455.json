@@ -1,0 +1,16 @@
+{
+  "target_url": "https://example.com",
+  "scan_timestamp": "2025-09-12T01:14:55.125374",
+  "summary": {
+    "total_hidden_links": 0,
+    "vulnerable_links": 0,
+    "total_vulnerabilities": 0,
+    "risk_level": "LOW",
+    "message": "لم يتم العثور على روابط خفية"
+  },
+  "hidden_links": [],
+  "vulnerabilities": [],
+  "recommendations": [
+    "الموقع نظيف من الروابط الخفية المشبوهة"
+  ]
+}

@@ -1,0 +1,990 @@
+{
+  "scan_timestamp": "2025-09-12T01:07:29.041998",
+  "total_domains_checked": 50,
+  "alive_domains": [
+    {
+      "domain": "www.mod.gov.il",
+      "is_alive": true,
+      "ip_address": "45.60.33.88",
+      "open_ports": [
+        80,
+        443,
+        21,
+        25,
+        53,
+        110,
+        143,
+        993,
+        995
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.energy.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.embassies.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.technion.ac.il",
+      "is_alive": true,
+      "ip_address": "132.68.238.32",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.cyberark.com",
+      "is_alive": true,
+      "ip_address": "104.16.68.86",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.court.gov.il",
+      "is_alive": true,
+      "ip_address": "84.110.173.72",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.navy.idf.il",
+      "is_alive": true,
+      "ip_address": "82.80.47.76",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.mobileye.com",
+      "is_alive": true,
+      "ip_address": "108.159.236.14",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.shabak.gov.il",
+      "is_alive": true,
+      "ip_address": "104.18.32.166",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.justice.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.piba.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.pmo.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.knesset.gov.il",
+      "is_alive": true,
+      "ip_address": "128.65.223.25",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.nice.com",
+      "is_alive": true,
+      "ip_address": "192.0.66.189",
+      "open_ports": [
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.jct.ac.il",
+      "is_alive": true,
+      "ip_address": "185.186.66.220",
+      "open_ports": [
+        80,
+        443,
+        25,
+        53,
+        993,
+        995
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.haifa.ac.il",
+      "is_alive": true,
+      "ip_address": "132.74.189.252",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.monday.com",
+      "is_alive": true,
+      "ip_address": "52.84.45.127",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.israelpost.co.il",
+      "is_alive": true,
+      "ip_address": "66.22.35.41",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.bgu.ac.il",
+      "is_alive": true,
+      "ip_address": "94.97.233.48",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.wix.com",
+      "is_alive": true,
+      "ip_address": "34.149.87.45",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.ironscales.com",
+      "is_alive": true,
+      "ip_address": "199.60.103.254",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.mossad.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.7.27",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.ariel.ac.il",
+      "is_alive": true,
+      "ip_address": "31.214.213.20",
+      "open_ports": [
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.waze.com",
+      "is_alive": true,
+      "ip_address": "130.211.9.172",
+      "open_ports": [
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.iaf.idf.il",
+      "is_alive": true,
+      "ip_address": "20.16.8.139",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.openu.ac.il",
+      "is_alive": true,
+      "ip_address": "3.175.164.115",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.mfa.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.education.gov.il",
+      "is_alive": true,
+      "ip_address": "84.110.148.71",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.mda.org.il",
+      "is_alive": true,
+      "ip_address": "34.117.154.164",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.checkpoint.com",
+      "is_alive": true,
+      "ip_address": "108.139.154.124",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.gov.il",
+      "is_alive": true,
+      "ip_address": "104.18.36.14",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.tourism.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.huji.ac.il",
+      "is_alive": true,
+      "ip_address": "128.139.7.8",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.fiverr.com",
+      "is_alive": true,
+      "ip_address": "104.18.113.47",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.cbs.gov.il",
+      "is_alive": true,
+      "ip_address": "192.114.84.16",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.police.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.76.155",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.idf.il",
+      "is_alive": true,
+      "ip_address": "107.154.249.27",
+      "open_ports": [
+        80,
+        443,
+        21,
+        25,
+        53,
+        110,
+        143,
+        993,
+        995
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.amdocs.com",
+      "is_alive": true,
+      "ip_address": "45.60.1.82",
+      "open_ports": [
+        80,
+        443,
+        21,
+        25,
+        53,
+        110,
+        143,
+        993,
+        995
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.health.gov.il",
+      "is_alive": true,
+      "ip_address": "3.160.188.73",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.wgalil.ac.il",
+      "is_alive": true,
+      "ip_address": "104.20.39.48",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.mof.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    }
+  ],
+  "dead_domains": [
+    "www.tau.ac.il",
+    "www.maya.gov.il",
+    "www.biu.ac.il",
+    "www.bankisrael.gov.il",
+    "www.moit.gov.il",
+    "www.transportation.gov.il",
+    "www.agriculture.gov.il",
+    "www.israel-mfa.gov.il",
+    "www.mod.idf.il"
+  ],
+  "government_sites": [
+    {
+      "domain": "www.mod.gov.il",
+      "is_alive": true,
+      "ip_address": "45.60.33.88",
+      "open_ports": [
+        80,
+        443,
+        21,
+        25,
+        53,
+        110,
+        143,
+        993,
+        995
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.energy.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.embassies.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.court.gov.il",
+      "is_alive": true,
+      "ip_address": "84.110.173.72",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.shabak.gov.il",
+      "is_alive": true,
+      "ip_address": "104.18.32.166",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.justice.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.piba.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.pmo.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.knesset.gov.il",
+      "is_alive": true,
+      "ip_address": "128.65.223.25",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.mossad.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.7.27",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.mfa.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.education.gov.il",
+      "is_alive": true,
+      "ip_address": "84.110.148.71",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.gov.il",
+      "is_alive": true,
+      "ip_address": "104.18.36.14",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.tourism.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.cbs.gov.il",
+      "is_alive": true,
+      "ip_address": "192.114.84.16",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.police.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.76.155",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.health.gov.il",
+      "is_alive": true,
+      "ip_address": "3.160.188.73",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.mof.gov.il",
+      "is_alive": true,
+      "ip_address": "147.237.3.58",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    }
+  ],
+  "military_sites": [
+    {
+      "domain": "www.navy.idf.il",
+      "is_alive": true,
+      "ip_address": "82.80.47.76",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.iaf.idf.il",
+      "is_alive": true,
+      "ip_address": "20.16.8.139",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.idf.il",
+      "is_alive": true,
+      "ip_address": "107.154.249.27",
+      "open_ports": [
+        80,
+        443,
+        21,
+        25,
+        53,
+        110,
+        143,
+        993,
+        995
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    }
+  ],
+  "education_sites": [
+    {
+      "domain": "www.technion.ac.il",
+      "is_alive": true,
+      "ip_address": "132.68.238.32",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.jct.ac.il",
+      "is_alive": true,
+      "ip_address": "185.186.66.220",
+      "open_ports": [
+        80,
+        443,
+        25,
+        53,
+        993,
+        995
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.haifa.ac.il",
+      "is_alive": true,
+      "ip_address": "132.74.189.252",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.bgu.ac.il",
+      "is_alive": true,
+      "ip_address": "94.97.233.48",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.ariel.ac.il",
+      "is_alive": true,
+      "ip_address": "31.214.213.20",
+      "open_ports": [
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.openu.ac.il",
+      "is_alive": true,
+      "ip_address": "3.175.164.115",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.huji.ac.il",
+      "is_alive": true,
+      "ip_address": "128.139.7.8",
+      "open_ports": [],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.wgalil.ac.il",
+      "is_alive": true,
+      "ip_address": "104.20.39.48",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    }
+  ],
+  "tech_companies": [
+    {
+      "domain": "www.cyberark.com",
+      "is_alive": true,
+      "ip_address": "104.16.68.86",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.mobileye.com",
+      "is_alive": true,
+      "ip_address": "108.159.236.14",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.nice.com",
+      "is_alive": true,
+      "ip_address": "192.0.66.189",
+      "open_ports": [
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.monday.com",
+      "is_alive": true,
+      "ip_address": "52.84.45.127",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.wix.com",
+      "is_alive": true,
+      "ip_address": "34.149.87.45",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.ironscales.com",
+      "is_alive": true,
+      "ip_address": "199.60.103.254",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.waze.com",
+      "is_alive": true,
+      "ip_address": "130.211.9.172",
+      "open_ports": [
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.checkpoint.com",
+      "is_alive": true,
+      "ip_address": "108.139.154.124",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.fiverr.com",
+      "is_alive": true,
+      "ip_address": "104.18.113.47",
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    },
+    {
+      "domain": "www.amdocs.com",
+      "is_alive": true,
+      "ip_address": "45.60.1.82",
+      "open_ports": [
+        80,
+        443,
+        21,
+        25,
+        53,
+        110,
+        143,
+        993,
+        995
+      ],
+      "services": {},
+      "risk_level": "UNKNOWN",
+      "vulnerabilities": []
+    }
+  ],
+  "summary": {
+    "total_checked": 50,
+    "alive_count": 41,
+    "dead_count": 9,
+    "government_count": 18,
+    "military_count": 3,
+    "education_count": 8,
+    "tech_companies_count": 10
+  }
+}
