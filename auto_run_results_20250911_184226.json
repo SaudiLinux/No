@@ -1,0 +1,28 @@
+{
+  "start_time": "2025-09-11T18:42:04.202219",
+  "end_time": "2025-09-11T18:42:26.113920",
+  "total_duration": "0:00:21.911701",
+  "results": {
+    "flask_server": {
+      "status": "warning"
+    },
+    "test_gov": {
+      "status": "error",
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\Dell\\OneDrive\\Desktop\\No\\test_gov.py\", line 31, in test_gov_website\n    print(\"\\U0001f504 جاري اختبار موقع gov.il/ar...\")\n  File \"C:\\Program Files\\Python312\\Lib\\encodings\\cp1256.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f504' in position 0: character maps to <undefined>\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Dell\\OneDrive\\Desktop\\No\\test_gov.py\", line 74, in <module>\n    test_gov_website()\n  File \"C:\\Users\\Dell\\OneDrive\\Desktop\\No\\test_gov.py\", line 71, in test_gov_website\n    print(\"\\u274c خطأ في الاتصال:\", str(e))\n  File \"C:\\Program Files\\Python312\\Lib\\encodings\\cp1256.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u274c' in position 0: character maps to <undefined>\n",
+      "log_file": "auto_run_test_gov_20250911_184224.log"
+    },
+    "test_gov_dorks": {
+      "status": "error",
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\Dell\\OneDrive\\Desktop\\No\\test_gov_dorks.py\", line 101, in <module>\n    test_gov_dorks()\n  File \"C:\\Users\\Dell\\OneDrive\\Desktop\\No\\test_gov_dorks.py\", line 9, in test_gov_dorks\n    print(\"\\U0001f3af اختبار موقع gov.il/ar باستخدام Google Dorks\")\n  File \"C:\\Program Files\\Python312\\Lib\\encodings\\cp1256.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f3af' in position 0: character maps to <undefined>\n",
+      "log_file": "auto_run_test_gov_dorks_20250911_184224.log"
+    },
+    "terminal_scan": {
+      "status": "error",
+      "stdout": "============================================================\n",
+      "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\Dell\\OneDrive\\Desktop\\No\\terminal_scan.py\", line 157, in <module>\n    scanner.scan_target(target)\n  File \"C:\\Users\\Dell\\OneDrive\\Desktop\\No\\terminal_scan.py\", line 16, in scan_target\n    print(f'\\U0001f3af بدء المسح الأمني لـ: {target}')\n  File \"C:\\Program Files\\Python312\\Lib\\encodings\\cp1256.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f3af' in position 0: character maps to <undefined>\n",
+      "log_file": "auto_run_terminal_scan_20250911_184225.log"
+    }
+  }
+}

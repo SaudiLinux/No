@@ -1,0 +1,15 @@
+{
+  "target": "https://www.mfa.gov.il",
+  "scan_time": "2025-09-11 18:33:43",
+  "domain_info": {
+    "domain": "www.mfa.gov.il",
+    "scheme": "https",
+    "path": ""
+  },
+  "sensitive_files": [],
+  "vulnerabilities": [],
+  "summary": {
+    "total_files": 0,
+    "total_vulnerabilities": 0
+  }
+}
