@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #006c35 0%, #004d26 100%);
             min-height: 100vh;
             color: #333;
         }
@@ -375,8 +375,11 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>أداة اكتشاف النطاقات الإسرائيلية</h1>
-            <p>مع دعم NVD واستشهادات DOI للثغرات الأمنية</p>
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='saudi_flag_logo.svg') }}" alt="علم السعودية" class="saudi-logo">
+                <h1>أداة اكتشاف النطاقات الإسرائيلية</h1>
+                <p>بتقنية سعودية متقدمة - للدفاع السيبراني الوطني</p>
+            </div>
         </div>
 
         <div class="tabs">
