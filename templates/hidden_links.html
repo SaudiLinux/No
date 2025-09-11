@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اكتشاف الروابط الخفية وفحص الثغرات</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Cairo', sans-serif;
+            min-height: 100vh;
+        }
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            margin: 20px 0;
+            padding: 30px;
+        }
+        .scan-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #007bff;
+        }
+        .vulnerability-card {
+            border-left-color: #dc3545;
+        }
+        .hidden-link-card {
+            border-left-color: #ffc107;
+        }
+        .severity-badge {
+            font-size: 0.8em;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        .severity-critical { background-color: #dc3545; color: white; }
+        .severity-high { background-color: #fd7e14; color: white; }
+        .severity-medium { background-color: #ffc107; color: black; }
+        .severity-low { background-color: #28a745; color: white; }
+        .loading-spinner {
+            display: none;
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        .url-input {
+            border-radius: 25px;
+            padding: 12px 20px;
+            border: 2px solid #007bff;
+            font-size: 1.1em;
+        }
+        .scan-btn {
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .scan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,123,255,0.4);
+        }
+        .icon-large {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            margin: 10px 0;
+        }
+        .stats-total { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .stats-vulnerable { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .stats-risk { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .recommendation-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+        }
+        .hidden-source {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .context-tag {
+            background: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+                <div class="main-container">
+                    <!-- رأس الصفحة -->
+                    <div class="text-center mb-4">
+                        <h1 class="display-4 text-primary mb-3">
+                            <i class="fas fa-user-secret icon-large"></i>
+                            <br>
+                            اكتشاف الروابط الخفية
+                        </h1>
+                        <p class="lead text-muted">
+                            اكتشف الروابط المستهدفة الخفية في أي موقع وفحصها للثغرات الأمنية
+                        </p>
+                    </div>
+
+                    <!-- منطقة الإدخال -->
+                    <div class="scan-card">
+                        <h3 class="mb-4">
+                            <i class="fas fa-search"></i>
+                            ابدأ الفحص
+                        </h3>
+                        
+                        <div class="input-group mb-3">
+                            <input type="url" 
+                                   class="form-control url-input" 
+                                   id="targetUrl" 
+                                   placeholder="https://example.com"
+                                   required>
+                            <button class="btn btn-light scan-btn" onclick="startScan()">
+                                <i class="fas fa-play"></i>
+                                ابدأ الفحص
+                            </button>
+                        </div>
+                        
+                        <!-- مؤشر التقدم -->
+                        <div class="progress mb-3 loading-spinner" id="progressBar">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" 
+                                 style="width: 0%"
+                                 id="progressValue">
+                                0%
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info loading-spinner" id="statusMessage">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            جاري فحص الروابط الخفية والثغرات...
+                        </div>
+                    </div>
+
+                    <!-- منطقة النتائج -->
+                    <div id="resultsSection" style="display: none;">
+                        <!-- ملخص النتائج -->
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="stats-card stats-total">
+                                    <i class="fas fa-link fa-2x mb-2"></i>
+                                    <h4 id="totalLinks">0</h4>
+                                    <p>الروابط الخفية</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stats-card stats-vulnerable">
+                                    <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                                    <h4 id="vulnerableLinks">0</h4>
+                                    <p>الروابط المعرضة</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stats-card stats-risk">
+                                    <i class="fas fa-shield-alt fa-2x mb-2"></i>
+                                    <h4 id="riskLevel">LOW</h4>
+                                    <p>مستوى الخطورة</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- أزرار التصدير -->
+                        <div class="text-center mb-4">
+                            <button class="btn btn-success me-2" onclick="exportReport('json')">
+                                <i class="fas fa-download"></i>
+                                تصدير JSON
+                            </button>
+                            <button class="btn btn-info" onclick="exportReport('txt')">
+                                <i class="fas fa-file-text"></i>
+                                تصدير TXT
+                            </button>
+                        </div>
+
+                        <!-- الروابط الخفية -->
+                        <div class="mb-4">
+                            <h3>
+                                <i class="fas fa-eye-slash text-warning"></i>
+                                الروابط الخفية المكتشفة
+                            </h3>
+                            <div id="hiddenLinksList"></div>
+                        </div>
+
+                        <!-- الثغرات -->
+                        <div class="mb-4">
+                            <h3>
+                                <i class="fas fa-bug text-danger"></i>
+                                الثغرات الأمنية
+                            </h3>
+                            <div id="vulnerabilitiesList"></div>
+                        </div>
+
+                        <!-- التوصيات -->
+                        <div class="mb-4">
+                            <h3>
+                                <i class="fas fa-lightbulb text-info"></i>
+                                التوصيات الأمنية
+                            </h3>
+                            <div id="recommendationsList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentReport = null;
+
+        async function startScan() {
+            const url = document.getElementById('targetUrl').value.trim();
+            
+            if (!url) {
+                alert('يرجى إدخال رابط الموقع');
+                return;
+            }
+
+            // إظهار مؤشر التحميل
+            document.querySelectorAll('.loading-spinner').forEach(el => el.style.display = 'block');
+            document.getElementById('resultsSection').style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/hidden_links/scan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: url })
+                });
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    currentReport = data;
+                    displayResults(data);
+                } else {
+                    alert('خطأ: ' + data.error);
+                }
+                
+            } catch (error) {
+                alert('خطأ في الاتصال بالخادم: ' + error.message);
+            } finally {
+                // إخفاء مؤشر التحميل
+                document.querySelectorAll('.loading-spinner').forEach(el => el.style.display = 'none');
+            }
+        }
+
+        function displayResults(data) {
+            // تحديث الملخص
+            document.getElementById('totalLinks').textContent = data.summary.total_hidden_links;
+            document.getElementById('vulnerableLinks').textContent = data.summary.vulnerable_links;
+            document.getElementById('riskLevel').textContent = data.summary.risk_level;
+            
+            // تحديث لون مستوى الخطورة
+            const riskLevel = document.getElementById('riskLevel');
+            riskLevel.className = '';
+            switch(data.summary.risk_level) {
+                case 'CRITICAL':
+                    riskLevel.className = 'severity-badge severity-critical';
+                    break;
+                case 'HIGH':
+                    riskLevel.className = 'severity-badge severity-high';
+                    break;
+                case 'MEDIUM':
+                    riskLevel.className = 'severity-badge severity-medium';
+                    break;
+                case 'LOW':
+                    riskLevel.className = 'severity-badge severity-low';
+                    break;
+            }
+
+            // عرض الروابط الخفية
+            displayHiddenLinks(data.hidden_links);
+            
+            // عرض الثغرات
+            displayVulnerabilities(data.vulnerabilities);
+            
+            // عرض التوصيات
+            displayRecommendations(data.recommendations);
+            
+            // إظهار النتائج
+            document.getElementById('resultsSection').style.display = 'block';
+        }
+
+        function displayHiddenLinks(links) {
+            const container = document.getElementById('hiddenLinksList');
+            container.innerHTML = '';
+            
+            if (links.length === 0) {
+                container.innerHTML = '<div class="alert alert-info">لم يتم العثور على روابط خفية</div>';
+                return;
+            }
+
+            links.forEach(link => {
+                const card = document.createElement('div');
+                card.className = 'result-card hidden-link-card';
+                card.innerHTML = `
+                    <h5><i class="fas fa-link"></i> ${link.url}</h5>
+                    <p><strong>المصدر:</strong> <span class="hidden-source">${link.source}</span></p>
+                    <p><strong>العنصر:</strong> ${link.element}</p>
+                    <p><strong>النص:</strong> ${link.text || 'غير متاح'}</p>
+                    <span class="context-tag">${link.context}</span>
+                    ${link.hidden ? '<span class="badge bg-warning">مخفي</span>' : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function displayVulnerabilities(vulnerabilities) {
+            const container = document.getElementById('vulnerabilitiesList');
+            container.innerHTML = '';
+            
+            if (vulnerabilities.length === 0) {
+                container.innerHTML = '<div class="alert alert-success">لم يتم العثور على ثغرات أمنية</div>';
+                return;
+            }
+
+            vulnerabilities.forEach(vuln => {
+                const card = document.createElement('div');
+                card.className = 'result-card vulnerability-card';
+                
+                let severityClass = 'severity-low';
+                switch(vuln.severity) {
+                    case 'CRITICAL': severityClass = 'severity-critical'; break;
+                    case 'HIGH': severityClass = 'severity-high'; break;
+                    case 'MEDIUM': severityClass = 'severity-medium'; break;
+                }
+                
+                card.innerHTML = `
+                    <h5><i class="fas fa-bug"></i> ${vuln.vulnerability_type}</h5>
+                    <p><strong>الرابط:</strong> <a href="${vuln.url}" target="_blank">${vuln.url}</a></p>
+                    <p><strong>الوصف:</strong> ${vuln.description}</p>
+                    <p><strong>الخطورة:</strong> <span class="severity-badge ${severityClass}">${vuln.severity}</span></p>
+                    <p><strong>المصدر:</strong> ${vuln.source}</p>
+                    <p><strong>السياق:</strong> ${vuln.context}</p>
+                    ${vuln.evidence ? `<p><strong>الأدلة:</strong> ${vuln.evidence.join(', ')}</p>` : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function displayRecommendations(recommendations) {
+            const container = document.getElementById('recommendationsList');
+            container.innerHTML = '';
+            
+            recommendations.forEach(rec => {
+                const item = document.createElement('div');
+                item.className = 'recommendation-item';
+                item.innerHTML = rec;
+                container.appendChild(item);
+            });
+        }
+
+        async function exportReport(format) {
+            if (!currentReport) {
+                alert('يرجى إجراء فحص أولاً');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/hidden_links/export/${format}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ report: currentReport })
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `hidden_links_report.${format}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    alert('خطأ في تصدير التقرير');
+                }
+            } catch (error) {
+                alert('خطأ في تصدير التقرير: ' + error.message);
+            }
+        }
+
+        // دعم Enter للبحث
+        document.getElementById('targetUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startScan();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بحث NVD المتقدم - الثغرات الأمنية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            min-height: 100vh;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00d4ff, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .search-container {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .filters-panel {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .filters-panel h3 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .filter-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .filter-group select option {
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        .range-slider {
+            margin: 15px 0;
+        }
+
+        .range-slider input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .range-values {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .checkbox-group input {
+            margin-left: 10px;
+            width: auto;
+        }
+
+        .results-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .cve-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .cve-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cve-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .cve-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .cve-id {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        .cve-id:hover {
+            text-decoration: underline;
+        }
+
+        .severity-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .severity-critical {
+            background: #ff4757;
+            color: white;
+        }
+
+        .severity-high {
+            background: #ffa502;
+            color: white;
+        }
+
+        .severity-medium {
+            background: #ffdd59;
+            color: #333;
+        }
+
+        .severity-low {
+            background: #2ed573;
+            color: white;
+        }
+
+        .cve-description {
+            margin: 10px 0;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .cve-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        .cve-detail {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        .cve-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .doi-link {
+            color: #00d4ff;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .doi-link:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #00d4ff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .page-btn {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            background: #00d4ff;
+            color: #1a1a2e;
+        }
+
+        .url-redirect-notice {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .url-redirect-notice a {
+            color: #ffc107;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .url-redirect-notice a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .search-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .cve-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 بحث NVD المتقدم</h1>
+            <p>قاعدة بيانات الثغرات الأمنية الوطنية مع إمكانات بحث وتصفية متقدمة</p>
+        </div>
+
+        <!-- إشعار إعادة التوجيه -->
+        <div class="url-redirect-notice">
+            <p>⚠️ تم تحديث عناوين URL:</p>
+            <p>النتائج: <a href="https://nvd.nist.gov/vuln/search#/nvd/home?resultType=records">https://nvd.nist.gov/vuln/search#/nvd/home?resultType=records</a></p>
+            <p>الإحصائيات: <a href="https://nvd.nist.gov/vuln/search#/nvd/home?resultType=statistics">https://nvd.nist.gov/vuln/search#/nvd/home?resultType=statistics</a></p>
+        </div>
+
+        <div class="search-container">
+            <!-- لوحة التصفية -->
+            <div class="filters-panel">
+                <h3>🔧 عوامل التصفية</h3>
+                
+                <div class="filter-group">
+                    <label for="searchQuery">البحث العام:</label>
+                    <input type="text" id="searchQuery" placeholder="CVE ID، وصف، أو منتج...">
+                </div>
+
+                <div class="filter-group">
+                    <label for="cveId">CVE ID محدد:</label>
+                    <input type="text" id="cveId" placeholder="مثال: CVE-2021-44228">
+                </div>
+
+                <div class="filter-group">
+                    <label for="productName">اسم المنتج:</label>
+                    <input type="text" id="productName" placeholder="مثال: apache, nginx">
+                </div>
+
+                <div class="filter-group">
+                    <label for="version">الإصدار:</label>
+                    <input type="text" id="version" placeholder="مثال: 2.4.41">
+                </div>
+
+                <div class="filter-group">
+                    <label for="severity">مستوى الخطورة:</label>
+                    <select id="severity" multiple>
+                        <option value="CRITICAL">خطير جداً</option>
+                        <option value="HIGH">عالي</option>
+                        <option value="MEDIUM">متوسط</option>
+                        <option value="LOW">منخفض</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="year">سنة النشر:</label>
+                    <select id="year">
+                        <option value="">جميع السنوات</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                    </select>
+                </div>
+
+                <div class="range-slider">
+                    <label>درجة CVSS:</label>
+                    <input type="range" id="cvssMin" min="0" max="10" step="0.1" value="0">
+                    <input type="range" id="cvssMax" min="0" max="10" step="0.1" value="10">
+                    <div class="range-values">
+                        <span id="cvssMinValue">0</span>
+                        <span>إلى</span>
+                        <span id="cvssMaxValue">10</span>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="hasDoi">
+                    <label for="hasDoi">مع DOI فقط</label>
+                </div>
+
+                <button class="btn btn-primary" onclick="applyFilters()">تطبيق التصفية</button>
+                <button class="btn btn-secondary" onclick="resetFilters()">إعادة تعيين</button>
+            </div>
+
+            <!-- منطقة النتائج -->
+            <div class="results-container">
+                <div class="search-header">
+                    <div class="search-box">
+                        <input type="text" id="quickSearch" placeholder="بحث سريع..." onkeyup="quickSearch()">
+                    </div>
+                    <div class="search-actions">
+                        <button class="btn btn-primary" onclick="searchNVD()">بحث جديد</button>
+                        <button class="btn btn-secondary" onclick="exportResults()">تصدير</button>
+                    </div>
+                </div>
+
+                <div class="results-stats" id="resultsStats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCVEs">0</div>
+                        <div>CVE إجمالي</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="criticalCount">0</div>
+                        <div>خطير جداً</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="highCount">0</div>
+                        <div>عالي</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="mediumCount">0</div>
+                        <div>متوسط</div>
+                    </div>
+                </div>
+
+                <div id="loading" class="loading" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <p>جاري البحث في قاعدة بيانات NVD...</p>
+                </div>
+
+                <div id="cveResults" class="cve-grid">
+                    <!-- سيتم ملؤها بالبيانات -->
+                </div>
+
+                <div id="pagination" class="pagination" style="display: none;">
+                    <!-- سيتم ملؤها بأزرار التنقل -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let totalPages = 1;
+        let allResults = [];
+        let filteredResults = [];
+
+        // تحديث قيم السلايدر
+        document.getElementById('cvssMin').addEventListener('input', function() {
+            document.getElementById('cvssMinValue').textContent = this.value;
+        });
+
+        document.getElementById('cvssMax').addEventListener('input', function() {
+            document.getElementById('cvssMaxValue').textContent = this.value;
+        });
+
+        // التعامل مع إعادة توجيه عناوين URL القديمة
+        function handleUrlRedirects() {
+            const url = new URL(window.location.href);
+            
+            // إعادة توجيه نتائج البحث القديمة
+            if (url.pathname.includes('/vuln/search/results')) {
+                window.location.href = 'https://nvd.nist.gov/vuln/search#/nvd/home?resultType=records';
+                return;
+            }
+            
+            // إعادة توجيه الإحصائيات القديمة
+            if (url.pathname.includes('/vuln/search/statistics')) {
+                window.location.href = 'https://nvd.nist.gov/vuln/search#/nvd/home?resultType=statistics';
+                return;
+            }
+        }
+
+        // تشغيل إعادة التوجيه عند تحميل الصفحة
+        handleUrlRedirects();
+
+        async function searchNVD() {
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('cveResults');
+            
+            loading.style.display = 'block';
+            results.innerHTML = '';
+            
+            try {
+                const params = buildSearchParams();
+                const response = await fetch('/api/nvd_search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(params)
+                });
+                
+                const data = await response.json();
+                allResults = data.vulnerabilities || [];
+                filteredResults = [...allResults];
+                
+                updateStats();
+                displayResults();
+                
+            } catch (error) {
+                results.innerHTML = '<p style="text-align: center; color: #ff6b6b;">خطأ في البحث</p>';
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function buildSearchParams() {
+            return {
+                query: document.getElementById('searchQuery').value,
+                cveId: document.getElementById('cveId').value,
+                product: document.getElementById('productName').value,
+                version: document.getElementById('version').value,
+                severity: Array.from(document.getElementById('severity').selectedOptions).map(opt => opt.value),
+                year: document.getElementById('year').value,
+                cvssMin: parseFloat(document.getElementById('cvssMin').value),
+                cvssMax: parseFloat(document.getElementById('cvssMax').value),
+                hasDoi: document.getElementById('hasDoi').checked,
+                page: currentPage,
+                limit: 20
+            };
+        }
+
+        function applyFilters() {
+            const params = buildSearchParams();
+            
+            filteredResults = allResults.filter(cve => {
+                let match = true;
+                
+                if (params.severity.length > 0) {
+                    match = match && params.severity.includes(cve.severity);
+                }
+                
+                if (params.cvssMin > 0 || params.cvssMax < 10) {
+                    match = match && cve.cvss_score >= params.cvssMin && cve.cvss_score <= params.cvssMax;
+                }
+                
+                if (params.hasDoi) {
+                    match = match && cve.doi;
+                }
+                
+                if (params.year) {
+                    match = match && cve.published_date.includes(params.year);
+                }
+                
+                return match;
+            });
+            
+            currentPage = 1;
+            displayResults();
+            updateStats();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchQuery').value = '';
+            document.getElementById('cveId').value = '';
+            document.getElementById('productName').value = '';
+            document.getElementById('version').value = '';
+            document.getElementById('severity').selectedIndex = -1;
+            document.getElementById('year').value = '';
+            document.getElementById('cvssMin').value = 0;
+            document.getElementById('cvssMax').value = 10;
+            document.getElementById('hasDoi').checked = false;
+            
+            document.getElementById('cvssMinValue').textContent = 0;
+            document.getElementById('cvssMaxValue').textContent = 10;
+            
+            filteredResults = [...allResults];
+            currentPage = 1;
+            displayResults();
+            updateStats();
+        }
+
+        function quickSearch() {
+            const query = document.getElementById('quickSearch').value.toLowerCase();
+            
+            if (query === '') {
+                filteredResults = [...allResults];
+            } else {
+                filteredResults = allResults.filter(cve => 
+                    cve.id.toLowerCase().includes(query) ||
+                    cve.description.toLowerCase().includes(query) ||
+                    cve.product_name.toLowerCase().includes(query)
+                );
+            }
+            
+            currentPage = 1;
+            displayResults();
+            updateStats();
+        }
+
+        function updateStats() {
+            const total = filteredResults.length;
+            const critical = filteredResults.filter(cve => cve.severity === 'CRITICAL').length;
+            const high = filteredResults.filter(cve => cve.severity === 'HIGH').length;
+            const medium = filteredResults.filter(cve => cve.severity === 'MEDIUM').length;
+            
+            document.getElementById('totalCVEs').textContent = total;
+            document.getElementById('criticalCount').textContent = critical;
+            document.getElementById('highCount').textContent = high;
+            document.getElementById('mediumCount').textContent = medium;
+        }
+
+        function displayResults() {
+            const container = document.getElementById('cveResults');
+            const perPage = 20;
+            const start = (currentPage - 1) * perPage;
+            const end = start + perPage;
+            const pageResults = filteredResults.slice(start, end);
+            
+            totalPages = Math.ceil(filteredResults.length / perPage);
+            
+            if (pageResults.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #ccc;">لا توجد نتائج</p>';
+                document.getElementById('pagination').style.display = 'none';
+                return;
+            }
+            
+            container.innerHTML = pageResults.map(cve => `
+                <div class="cve-card">
+                    <div class="cve-header">
+                        <a href="https://nvd.nist.gov/vuln/detail/${cve.id}" 
+                           class="cve-id" target="_blank">${cve.id}</a>
+                        <span class="severity-badge severity-${cve.severity.toLowerCase()}">
+                            ${cve.severity}
+                        </span>
+                    </div>
+                    
+                    <div class="cve-description">${cve.description}</div>
+                    
+                    <div class="cve-details">
+                        <div class="cve-detail">
+                            <strong>المنتج:</strong> ${cve.product_name || 'غير محدد'}
+                        </div>
+                        <div class="cve-detail">
+                            <strong>الإصدار:</strong> ${cve.version || 'جميع الإصدارات'}
+                        </div>
+                        <div class="cve-detail">
+                            <strong>درجة CVSS:</strong> ${cve.cvss_score || 'غير متاح'}
+                        </div>
+                        <div class="cve-detail">
+                            <strong>تاريخ النشر:</strong> ${cve.published_date || 'غير متاح'}
+                        </div>
+                    </div>
+                    
+                    ${cve.doi ? `
+                        <div class="cve-tags">
+                            <a href="${cve.doi}" class="doi-link" target="_blank">📄 DOI</a>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="cve-tags">
+                        ${(cve.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+            
+            displayPagination();
+        }
+
+        function displayPagination() {
+            const pagination = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                pagination.style.display = 'none';
+                return;
+            }
+            
+            pagination.style.display = 'flex';
+            
+            let html = '';
+            const maxPages = 5;
+            const startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
+            const endPage = Math.min(totalPages, startPage + maxPages - 1);
+            
+            if (currentPage > 1) {
+                html += `<button class="page-btn" onclick="goToPage(${currentPage - 1})">السابق</button>`;
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const active = i === currentPage ? 'active' : '';
+                html += `<button class="page-btn ${active}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            
+            if (currentPage < totalPages) {
+                html += `<button class="page-btn" onclick="goToPage(${currentPage + 1})">التالي</button>`;
+            }
+            
+            pagination.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            displayResults();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function exportResults() {
+            if (filteredResults.length === 0) {
+                alert('لا توجد نتائج للتصدير');
+                return;
+            }
+            
+            const csvContent = [
+                'CVE ID,Description,Severity,CVSS Score,Product,Version,Published Date,DOI',
+                ...filteredResults.map(cve => 
+                    `"${cve.id}","${cve.description}","${cve.severity}","${cve.cvss_score || ''}","${cve.product_name || ''}","${cve.version || ''}","${cve.published_date || ''}","${cve.doi || ''}"`
+                )
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `nvd_search_results_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // تحميل نتائج أولية عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            searchNVD();
+        });
+    </script>
+</body>
+</html>

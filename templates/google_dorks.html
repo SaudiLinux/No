@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ماسح Google Dorks المتقدم</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Cairo', sans-serif;
+        }
+        .scan-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .category-card {
+            border: none;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        .finding-card {
+            border-left: 4px solid #007bff;
+            transition: all 0.3s ease;
+        }
+        .finding-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .risk-high { border-left-color: #dc3545; }
+        .risk-medium { border-left-color: #ffc107; }
+        .risk-low { border-left-color: #28a745; }
+        .risk-info { border-left-color: #17a2b8; }
+        .loading-spinner {
+            display: none;
+        }
+        .result-section {
+            display: none;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(10px);
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt me-2"></i>
+                نظام الأمن السيبراني
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i> الرئيسية
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/hidden_links">
+                            <i class="fas fa-link"></i> الروابط الخفية
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/exploitation_test">
+                            <i class="fas fa-bug"></i> اختبار الاستغلال
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/google_dorks">
+                            <i class="fab fa-google"></i> Google Dorks
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="scan-container p-5">
+                    <div class="text-center mb-5">
+                        <h1 class="display-5 fw-bold text-primary mb-3">
+                            <i class="fab fa-google me-3"></i>
+                            ماسح Google Dorks المتقدم
+                        </h1>
+                        <p class="lead text-muted">
+                            اكتشف الصفحات الإدارية واللوحات الخلفية باستخدام تقنيات البحث المتقدمة
+                        </p>
+                    </div>
+
+                    <!-- نموذج الإدخال -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-4">
+                                <i class="fas fa-search me-2"></i>
+                                إعدادات الفحص
+                            </h5>
+                            
+                            <form id="scanForm">
+                                <div class="mb-3">
+                                    <label for="targetUrl" class="form-label fw-bold">
+                                        <i class="fas fa-globe me-2"></i>
+                                        رابط الموقع المستهدف
+                                    </label>
+                                    <input type="url" class="form-control form-control-lg" 
+                                           id="targetUrl" placeholder="https://example.com" required>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="maxResults" class="form-label fw-bold">
+                                            <i class="fas fa-list-ol me-2"></i>
+                                            الحد الأقصى للنتائج
+                                        </label>
+                                        <select class="form-select" id="maxResults">
+                                            <option value="3">3 نتائج</option>
+                                            <option value="5" selected>5 نتائج</option>
+                                            <option value="10">10 نتائج</option>
+                                            <option value="15">15 نتيجة</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-tags me-2"></i>
+                                            فئات البحث
+                                        </label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="admin_login" id="adminLogin" checked>
+                                            <label class="form-check-label" for="adminLogin">
+                                                صفحات تسجيل الدخول الإدارية
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="admin_directories" id="adminDirs" checked>
+                                            <label class="form-check-label" for="adminDirs">
+                                                دلائل الإدارة
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="config_files" id="configFiles" checked>
+                                            <label class="form-check-label" for="configFiles">
+                                                ملفات الإعداد
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="sensitive_pages" id="sensitivePages" checked>
+                                            <label class="form-check-label" for="sensitivePages">
+                                                صفحات حساسة
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                                        <i class="fas fa-search me-2"></i>
+                                        بدء الفحص
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- مؤشر التحميل -->
+                    <div class="text-center loading-spinner" id="loadingSpinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">جاري الفحص...</span>
+                        </div>
+                        <p class="mt-3 text-muted">جاري فحص الموقع باستخدام Google Dorks...</p>
+                    </div>
+
+                    <!-- نتائج الفحص -->
+                    <div class="result-section" id="resultsSection">
+                        <!-- ملخص النتائج -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="card text-center border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <i class="fas fa-search fa-2x text-primary mb-2"></i>
+                                        <h4 class="card-title" id="totalFindings">0</h4>
+                                        <p class="card-text text-muted">إجمالي النتائج</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+                                        <h4 class="card-title" id="riskScore">0</h4>
+                                        <p class="card-text text-muted">درجة الخطورة</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <i class="fas fa-shield-alt fa-2x text-success mb-2"></i>
+                                        <h4 class="card-title" id="riskLevel">-</h4>
+                                        <p class="card-text text-muted">مستوى الخطورة</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <i class="fas fa-clock fa-2x text-info mb-2"></i>
+                                        <h4 class="card-title" id="scanTime">-</h4>
+                                        <p class="card-text text-muted">وقت الفحص</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- النتائج التفصيلية -->
+                        <div id="detailedResults"></div>
+
+                        <!-- أزرار التصدير -->
+                        <div class="text-center mt-4">
+                            <button class="btn btn-success me-2" onclick="exportReport('json')">
+                                <i class="fas fa-download me-2"></i>
+                                تصدير JSON
+                            </button>
+                            <button class="btn btn-secondary" onclick="exportReport('txt')">
+                                <i class="fas fa-file-text me-2"></i>
+                                تصدير TXT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let scanData = null;
+
+        document.getElementById('scanForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const targetUrl = document.getElementById('targetUrl').value;
+            const maxResults = document.getElementById('maxResults').value;
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const categories = Array.from(checkboxes).map(cb => cb.value);
+
+            if (!targetUrl) {
+                alert('يرجى إدخال رابط الموقع');
+                return;
+            }
+
+            if (categories.length === 0) {
+                alert('يرجى اختيار فئة واحدة على الأقل');
+                return;
+            }
+
+            // إظهار مؤشر التحميل
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('resultsSection').style.display = 'none';
+
+            try {
+                const response = await fetch('/api/google_dorks/scan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        target_url: targetUrl,
+                        categories: categories,
+                        max_results: parseInt(maxResults)
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    scanData = data;
+                    displayResults(data);
+                } else {
+                    alert('خطأ في الفحص: ' + data.error);
+                }
+            } catch (error) {
+                alert('خطأ في الاتصال: ' + error.message);
+            } finally {
+                document.getElementById('loadingSpinner').style.display = 'none';
+            }
+        });
+
+        function displayResults(data) {
+            // تحديث الملخص
+            document.getElementById('totalFindings').textContent = data.total_findings;
+            document.getElementById('riskScore').textContent = data.risk_score;
+            document.getElementById('riskLevel').textContent = data.risk_level;
+            document.getElementById('scanTime').textContent = data.scan_timestamp;
+
+            // عرض النتائج التفصيلية
+            const detailedResults = document.getElementById('detailedResults');
+            detailedResults.innerHTML = '';
+
+            const categoryNames = {
+                'admin_login': 'صفحات تسجيل الدخول الإدارية',
+                'admin_directories': 'دلائل الإدارة',
+                'config_files': 'ملفات الإعداد',
+                'backup_files': 'ملفات النسخ الاحتياطي',
+                'log_files': 'ملفات السجلات',
+                'open_directories': 'الدلائل المفتوحة',
+                'sensitive_pages': 'الصفحات الحساسة'
+            };
+
+            for (const [category, findings] of Object.entries(data.findings)) {
+                if (findings.length > 0) {
+                    const categoryCard = document.createElement('div');
+                    categoryCard.className = 'card mb-4';
+                    categoryCard.innerHTML = `
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-folder me-2"></i>
+                                ${categoryNames[category] || category}
+                                <span class="badge bg-light text-dark ms-2">${findings.length}</span>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            ${findings.map(finding => `
+                                <div class="finding-card card mb-3">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <i class="fas fa-link me-2"></i>
+                                            <a href="${finding.url}" target="_blank" class="text-decoration-none">
+                                                ${finding.title}
+                                            </a>
+                                        </h6>
+                                        <p class="card-text text-muted">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            ${finding.description || 'صفحة إدارية محتملة'}
+                                        </p>
+                                        <small class="text-muted">
+                                            <i class="fas fa-external-link-alt me-1"></i>
+                                            ${finding.url}
+                                        </small>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    detailedResults.appendChild(categoryCard);
+                }
+            }
+
+            // إظهار قسم النتائج
+            document.getElementById('resultsSection').style.display = 'block';
+        }
+
+        async function exportReport(format) {
+            if (!scanData) {
+                alert('لا توجد نتائج للتصدير');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/google_dorks/export/${format}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        scan_results: scanData
+                    })
+                });
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `google_dorks_report.${format}`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (error) {
+                alert('خطأ في التصدير: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

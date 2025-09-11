@@ -3,264 +3,1041 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ماسح المواقع الإسرائيلية</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>أداة اكتشاف النطاقات الإسرائيلية - مع دعم NVD</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
+            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            color: #333;
         }
-        .main-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            margin-top: 50px;
-            padding: 30px;
-        }
-        .scan-card {
-            background: #f8f9fa;
-            border-radius: 10px;
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid #007bff;
         }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8f9fa;
+            border: none;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .input-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group input {
+            margin-left: 10px;
+            width: auto;
+        }
+
+        .slider-group {
+            margin-bottom: 20px;
+        }
+
+        .slider-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .slider {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .slider-values {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            line-height: 20px;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .status.running {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        .status.completed {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .results {
+            margin-top: 20px;
+        }
+
         .result-item {
-            background: #fff;
-            border-radius: 8px;
+            background: #f8f9fa;
             padding: 15px;
             margin-bottom: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
         }
-        .vulnerability-critical { border-left-color: #dc3545; }
-        .vulnerability-medium { border-left-color: #ffc107; }
-        .vulnerability-low { border-left-color: #28a745; }
-        .loading-spinner {
-            display: none;
+
+        .result-item h4 {
+            color: #333;
+            margin-bottom: 10px;
         }
-        .progress-bar {
-            transition: width 0.3s ease;
+
+        .result-item p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .vulnerability-list {
+            margin-top: 10px;
+        }
+
+        .vulnerability-item {
+            background: #fff3cd;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 3px solid #ffc107;
+        }
+
+        .vulnerability-item.high {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+
+        .vulnerability-item.medium {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+
+        .vulnerability-item.low {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .nvd-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .nvd-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nvd-item h5 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .doi-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .doi-link:hover {
+            text-decoration: underline;
+        }
+
+        .cve-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #2196f3;
+        }
+
+        .cve-id {
+            font-weight: bold;
+            color: #1976d2;
+            cursor: pointer;
+        }
+
+        .cve-id:hover {
+            color: #0d47a1;
+        }
+
+        .export-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .export-options {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="main-container">
-            <div class="text-center mb-4">
-                <h1><i class="fas fa-search"></i> ماسح المواقع الإسرائيلية</h1>
-                <p class="text-muted">أداة متخصصة في فحص المواقع الإسرائيلية (.il) للثغرات الأمنية والملفات المخفية</p>
+        <div class="header">
+            <h1>أداة اكتشاف النطاقات الإسرائيلية</h1>
+            <p>مع دعم NVD واستشهادات DOI للثغرات الأمنية</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('scan')">المسح</button>
+            <button class="tab" onclick="showTab('stealth')">الإخفاء</button>
+            <button class="tab" onclick="showTab('vulnerabilities')">الثغرات</button>
+            <button class="tab" onclick="showTab('nvd')">NVD & DOI</button>
+            <button class="tab" onclick="showTab('results')">النتائج</button>
+        </div>
+
+        <!-- تبويب المسح -->
+        <div id="scan-tab" class="tab-content active">
+            <h2>المسح الشامل للنطاقات</h2>
+            <div class="input-group">
+                <label for="keywords">الكلمات المفتاحية (افصل بينها بفاصلة):</label>
+                <textarea id="keywords" placeholder="مثال: israel, idf, mossad, cyber"></textarea>
             </div>
-
-            <div class="row">
-                <div class="col-md-8">
-                    <!-- نموذج إدخال المواقع -->
-                    <div class="scan-card">
-                        <h5><i class="fas fa-link"></i> إضافة مواقع للمسح</h5>
-                        <div class="mb-3">
-                            <label class="form-label">قائمة المواقع الإسرائيلية:</label>
-                            <textarea class="form-control" id="urlsInput" rows="4" 
-                                placeholder="https://example.co.il
-https://test.gov.il
-https://company.org.il"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">نوع المسح:</label>
-                            <select class="form-select" id="scanType">
-                                <option value="all">مسح شامل (كل أنواع المسح)</option>
-                                <option value="domains">مسح النطاقات فقط</option>
-                                <option value="vulnerabilities">مسح الثغرات فقط</option>
-                                <option value="hidden_files">مسح الملفات المخفية فقط</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-primary" onclick="startScan()">
-                            <i class="fas fa-play"></i> بدء المسح
-                        </button>
-                        <button class="btn btn-danger" onclick="stopScan()" style="display:none;" id="stopBtn">
-                            <i class="fas fa-stop"></i> إيقاف المسح
-                        </button>
-                    </div>
-
-                    <!-- شريط التقدم -->
-                    <div class="scan-card" id="progressCard" style="display:none;">
-                        <h5><i class="fas fa-spinner fa-spin"></i> جاري المسح...</h5>
-                        <div class="progress mb-2">
-                            <div class="progress-bar" role="progressbar" id="progressBar" style="width: 0%">0%</div>
-                        </div>
-                        <small class="text-muted" id="progressText">جاري التحضير...</small>
-                    </div>
-
-                    <!-- النتائج -->
-                    <div class="scan-card" id="resultsCard" style="display:none;">
-                        <h5><i class="fas fa-list"></i> نتائج المسح</h5>
-                        <div id="resultsContainer"></div>
-                    </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="useStealth" checked>
+                <label for="useStealth">استخدام إعدادات الإخفاء</label>
+            </div>
+            
+            <button class="btn" onclick="startScan()">بدء المسح</button>
+            <button class="btn btn-danger" onclick="stopScan()">إيقاف المسح</button>
+            
+            <div id="scan-status" class="status" style="display: none;"></div>
+            <div id="scan-progress" class="progress-container" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%">0%</div>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-md-4">
-                    <!-- إحصائيات سريعة -->
-                    <div class="scan-card">
-                        <h5><i class="fas fa-chart-bar"></i> إحصائيات</h5>
-                        <div class="row">
-                            <div class="col-6">
-                                <small>المواقع الممسوحة</small>
-                                <h4 id="sitesCount">0</h4>
-                            </div>
-                            <div class="col-6">
-                                <small>الثغرات المكتشفة</small>
-                                <h4 id="vulnsCount">0</h4>
-                            </div>
-                        </div>
-                    </div>
+        <!-- تبويب الإخفاء -->
+        <div id="stealth-tab" class="tab-content">
+            <h2>إعدادات الإخفاء والتخفي</h2>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="proxyRotation" checked>
+                <label for="proxyRotation">تدوير البروكسي</label>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="userAgentRotation" checked>
+                <label for="userAgentRotation">تدوير User Agent</label>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="randomDelay" checked>
+                <label for="randomDelay">تأخير عشوائي</label>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="dnsRotation" checked>
+                <label for="dnsRotation">تدوير خوادم DNS</label>
+            </div>
+            
+            <div class="slider-group">
+                <label>نطاق التأخير (ثواني):</label>
+                <input type="range" id="minDelay" class="slider" min="1" max="10" value="1">
+                <input type="range" id="maxDelay" class="slider" min="5" max="30" value="5">
+                <div class="slider-values">
+                    <span>الحد الأدنى: <span id="minDelayValue">1</span> ثانية</span>
+                    <span>الحد الأقصى: <span id="maxDelayValue">5</span> ثواني</span>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="updateStealthConfig()">تحديث الإعدادات</button>
+            <button class="btn" onclick="getAttackSurface()">عرض سطح الهجوم</button>
+        </div>
 
-                    <!-- أدوات سريعة -->
-                    <div class="scan-card">
-                        <h5><i class="fas fa-tools"></i> أدوات سريعة</h5>
-                        <button class="btn btn-outline-primary w-100 mb-2" onclick="loadDomains()">
-                            <i class="fas fa-search"></i> استكشاف نطاقات جديدة
-                        </button>
-                        <button class="btn btn-outline-success w-100 mb-2" onclick="downloadReport()">
-                            <i class="fas fa-download"></i> تحميل التقرير
-                        </button>
-                        <button class="btn btn-outline-secondary w-100" onclick="clearResults()">
-                            <i class="fas fa-trash"></i> مسح النتائج
-                        </button>
-                    </div>
+        <!-- تبويب الثغرات -->
+        <div id="vulnerabilities-tab" class="tab-content">
+            <h2>فحص الثغرات الأمنية</h2>
+            
+            <div class="input-group">
+                <label for="vuln-domains">النطاقات للفحص (افصل بينها بفاصلة):</label>
+                <textarea id="vuln-domains" placeholder="مثال: example.com, test.org"></textarea>
+            </div>
+            
+            <button class="btn" onclick="startVulnerabilityScan()">بدء فحص الثغرات</button>
+            <button class="btn btn-danger" onclick="stopVulnerabilityScan()">إيقاف الفحص</button>
+            
+            <div id="vuln-status" class="status" style="display: none;"></div>
+            <div id="vuln-progress" class="progress-container" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="vuln-progress-fill" style="width: 0%">0%</div>
+                </div>
+            </div>
+        </div>
 
-                    <!-- قائمة النطاقات -->
-                    <div class="scan-card">
-                        <h5><i class="fas fa-globe"></i> نطاقات إسرائيلية</h5>
-                        <div id="domainsList" style="max-height: 200px; overflow-y: auto;">
-                            <small class="text-muted">اضغط على "استكشاف نطاقات جديدة" للحصول على قائمة</small>
-                        </div>
-                    </div>
+        <!-- تبويب NVD & DOI -->
+        <div id="nvd-tab" class="tab-content">
+            <h2>معلومات NVD واستشهادات DOI</h2>
+            
+            <div class="input-group">
+                <label for="cve-id">رقم CVE:</label>
+                <input type="text" id="cve-id" placeholder="مثال: CVE-2021-44228">
+                <button class="btn" onclick="getNVDInfo()">الحصول على معلومات</button>
+            </div>
+            
+            <div class="input-group">
+                <label for="product-name">اسم المنتج:</label>
+                <input type="text" id="product-name" placeholder="مثال: apache, nginx">
+                <input type="text" id="product-version" placeholder="الإصدار (اختياري)">
+                <button class="btn" onclick="getCVEByProduct()">الحصول على CVEs</button>
+            </div>
+            
+            <button class="btn" onclick="getNVDStatistics()">إحصائيات NVD</button>
+            <button class="btn" onclick="getVulnerabilityCitations()">استشهادات الثغرات</button>
+            
+            <div id="nvd-results" class="nvd-section" style="display: none;">
+                <h3>نتائج NVD</h3>
+                <div id="nvd-content"></div>
+            </div>
+        </div>
+
+        <!-- تبويب النتائج -->
+        <div id="results-tab" class="tab-content">
+            <h2>النتائج والإحصائيات</h2>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <h3 id="domains-count">0</h3>
+                    <p>النطاقات المكتشفة</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="vulnerabilities-count">0</h3>
+                    <p>الثغرات المكتشفة</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="high-risk-count">0</h3>
+                    <p>الثغرات عالية الخطورة</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="cve-count">0</h3>
+                    <p>CVEs المرتبطة</p>
+                </div>
+            </div>
+            
+            <div id="results-content" class="results"></div>
+            
+            <div class="export-section">
+                <h3>تصدير النتائج</h3>
+                <div class="export-options">
+                    <button class="btn" onclick="exportResults('json')">تصدير JSON</button>
+                    <button class="btn" onclick="exportResults('txt')">تصدير TXT</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let scanInterval;
+        let vulnInterval;
+
+        function showTab(tabName) {
+            // إخفاء جميع التبويبات
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // إظهار التبويب المطلوب
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // تحديث قيم السلايدرات
+        document.getElementById('minDelay').addEventListener('input', function() {
+            document.getElementById('minDelayValue').textContent = this.value;
+        });
+
+        document.getElementById('maxDelay').addEventListener('input', function() {
+            document.getElementById('maxDelayValue').textContent = this.value;
+        });
 
         async function startScan() {
-            const urls = document.getElementById('urlsInput').value.trim().split('\n').filter(url => url.trim());
-            const scanType = document.getElementById('scanType').value;
-
-            if (urls.length === 0) {
-                alert('الرجاء إدخال على الأقل عنوان URL واحد');
+            const keywords = document.getElementById('keywords').value;
+            const useStealth = document.getElementById('useStealth').checked;
+            
+            if (!keywords.trim()) {
+                alert('يرجى إدخال الكلمات المفتاحية');
                 return;
             }
 
             const response = await fetch('/api/start_scan', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ urls, scan_type: scanType })
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    keywords: keywords.split(',').map(k => k.trim()),
+                    use_stealth: useStealth
+                })
             });
 
-            if (response.ok) {
-                document.getElementById('progressCard').style.display = 'block';
-                document.getElementById('resultsCard').style.display = 'none';
-                document.getElementById('stopBtn').style.display = 'inline-block';
-                
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('scan-status').style.display = 'block';
+                document.getElementById('scan-progress').style.display = 'block';
                 scanInterval = setInterval(updateScanStatus, 2000);
-            } else {
-                const error = await response.json();
-                alert(error.error);
             }
-        }
-
-        async function stopScan() {
-            await fetch('/api/stop_scan', { method: 'POST' });
-            clearInterval(scanInterval);
-            document.getElementById('stopBtn').style.display = 'none';
         }
 
         async function updateScanStatus() {
             const response = await fetch('/api/scan_status');
-            const status = await response.json();
-
-            if (!status.is_running) {
-                clearInterval(scanInterval);
-                document.getElementById('stopBtn').style.display = 'none';
-                loadResults();
-            }
-
-            document.getElementById('progressBar').style.width = status.progress + '%';
-            document.getElementById('progressBar').textContent = status.progress + '%';
-            document.getElementById('progressText').textContent = `تمت معالجة ${status.results.length} موقع`;
-        }
-
-        async function loadResults() {
-            const response = await fetch('/api/results');
-            const results = await response.json();
-            
-            displayResults(results);
-            updateStatistics(results);
-            
-            document.getElementById('progressCard').style.display = 'none';
-            document.getElementById('resultsCard').style.display = 'block';
-        }
-
-        function displayResults(results) {
-            const container = document.getElementById('resultsContainer');
-            container.innerHTML = '';
-
-            results.forEach(result => {
-                const item = document.createElement('div');
-                item.className = 'result-item';
-                
-                let content = `<strong>${result.url || result.domain}</strong><br>`;
-                
-                if (result.vulnerabilities) {
-                    content += `<small>الثغرات: ${result.vulnerabilities.length}</small><br>`;
-                    result.vulnerabilities.forEach(vuln => {
-                        content += `<span class="badge bg-danger">${vuln.type}</span> `;
-                    });
-                }
-                
-                if (result.sensitive_files) {
-                    content += `<br><small>الملفات الحساسة: ${result.sensitive_files.length}</small>`;
-                }
-                
-                item.innerHTML = content;
-                container.appendChild(item);
-            });
-        }
-
-        function updateStatistics(results) {
-            document.getElementById('sitesCount').textContent = results.length;
-            
-            let vulnsCount = 0;
-            results.forEach(r => {
-                if (r.vulnerabilities) vulnsCount += r.vulnerabilities.length;
-            });
-            document.getElementById('vulnsCount').textContent = vulnsCount;
-        }
-
-        async function loadDomains() {
-            const response = await fetch('/api/domains');
             const data = await response.json();
             
-            const container = document.getElementById('domainsList');
-            container.innerHTML = '';
+            const statusDiv = document.getElementById('scan-status');
+            const progressFill = document.getElementById('progress-fill');
             
-            data.domains.forEach(domain => {
-                const item = document.createElement('div');
-                item.innerHTML = `<small><i class="fas fa-globe"></i> ${domain}</small>`;
-                container.appendChild(item);
+            if (data.is_running) {
+                statusDiv.className = 'status running';
+                statusDiv.textContent = `${data.current_phase} - ${data.progress}%`;
+                progressFill.style.width = data.progress + '%';
+                progressFill.textContent = data.progress + '%';
+            } else {
+                statusDiv.className = 'status completed';
+                statusDiv.textContent = 'اكتمل المسح بنجاح!';
+                progressFill.style.width = '100%';
+                progressFill.textContent = '100%';
+                clearInterval(scanInterval);
+                updateResults();
+            }
+            
+            document.getElementById('domains-count').textContent = data.domains_found;
+            document.getElementById('vulnerabilities-count').textContent = data.vulnerabilities_found;
+        }
+
+        async function startVulnerabilityScan() {
+            const domains = document.getElementById('vuln-domains').value;
+            
+            if (!domains.trim()) {
+                alert('يرجى إدخال النطاقات');
+                return;
+            }
+
+            const response = await fetch('/api/start_vulnerability_scan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    domains: domains.split(',').map(d => d.trim())
+                })
             });
+
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('vuln-status').style.display = 'block';
+                document.getElementById('vuln-progress').style.display = 'block';
+                vulnInterval = setInterval(updateVulnerabilityStatus, 2000);
+            }
         }
 
-        async function downloadReport() {
-            window.location.href = '/api/download_report';
+        async function updateVulnerabilityStatus() {
+            const response = await fetch('/api/vulnerability_status');
+            const data = await response.json();
+            
+            const statusDiv = document.getElementById('vuln-status');
+            const progressFill = document.getElementById('vuln-progress-fill');
+            
+            if (data.is_running) {
+                statusDiv.className = 'status running';
+                statusDiv.textContent = `جاري فحص: ${data.current_target} (${data.completed_targets}/${data.total_targets})`;
+                progressFill.style.width = data.progress + '%';
+                progressFill.textContent = data.progress + '%';
+            } else {
+                statusDiv.className = 'status completed';
+                statusDiv.textContent = 'اكتمل فحص الثغرات!';
+                progressFill.style.width = '100%';
+                progressFill.textContent = '100%';
+                clearInterval(vulnInterval);
+                updateResults();
+            }
+            
+            document.getElementById('vulnerabilities-count').textContent = data.vulnerabilities_found;
         }
 
-        function clearResults() {
-            document.getElementById('resultsContainer').innerHTML = '';
-            document.getElementById('resultsCard').style.display = 'none';
-            document.getElementById('sitesCount').textContent = '0';
-            document.getElementById('vulnsCount').textContent = '0';
+        async function updateStealthConfig() {
+            const config = {
+                use_proxy_rotation: document.getElementById('proxyRotation').checked,
+                use_user_agent_rotation: document.getElementById('userAgentRotation').checked,
+                use_random_delay: document.getElementById('randomDelay').checked,
+                use_dns_rotation: document.getElementById('dnsRotation').checked,
+                min_delay: parseInt(document.getElementById('minDelay').value),
+                max_delay: parseInt(document.getElementById('maxDelay').value)
+            };
+
+            const response = await fetch('/api/stealth_config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(config)
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                alert('تم تحديث إعدادات الإخفاء بنجاح');
+            }
         }
+
+        async function getAttackSurface() {
+            const response = await fetch('/api/attack_surface');
+            const data = await response.json();
+            
+            alert(`سطح الهجوم الحالي:\nبروكسي: ${data.current_proxy}\nUser Agent: ${data.current_user_agent}\nDNS: ${data.current_dns}`);
+        }
+
+        async function getNVDInfo() {
+            const cveId = document.getElementById('cve-id').value;
+            if (!cveId.trim()) {
+                alert('يرجى إدخال رقم CVE');
+                return;
+            }
+
+            const response = await fetch(`/api/nvd_info/${cveId}`);
+            const data = await response.json();
+            
+            if (data.error) {
+                alert('خطأ: ' + data.error);
+                return;
+            }
+
+            displayNVDResults(data);
+        }
+
+        async function getCVEByProduct() {
+            const product = document.getElementById('product-name').value;
+            const version = document.getElementById('product-version').value;
+            
+            if (!product.trim()) {
+                alert('يرجى إدخال اسم المنتج');
+                return;
+            }
+
+            const response = await fetch('/api/cve_by_product', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    product: product,
+                    version: version || null
+                })
+            });
+
+            const data = await response.json();
+            displayNVDResults(data);
+        }
+
+        async function getNVDStatistics() {
+            const response = await fetch('/api/nvd_statistics');
+            const data = await response.json();
+            displayNVDResults(data);
+        }
+
+        async function getVulnerabilityCitations() {
+            const response = await fetch('/api/vulnerability_citations');
+            const data = await response.json();
+            displayNVDResults(data);
+        }
+
+        function displayNVDResults(data) {
+            const nvdSection = document.getElementById('nvd-results');
+            const nvdContent = document.getElementById('nvd-content');
+            
+            nvdSection.style.display = 'block';
+            
+            if (data.cves) {
+                nvdContent.innerHTML = `
+                    <h4>CVEs لـ ${data.product} ${data.version || ''}</h4>
+                    ${data.cves.map(cve => `
+                        <div class="cve-info">
+                            <div class="cve-id" onclick="getNVDInfo('${cve.id}')">${cve.id}</div>
+                            <p><strong>الوصف:</strong> ${cve.description}</p>
+                            <p><strong>الخطورة:</strong> ${cve.severity}</p>
+                            ${cve.doi ? `<p><strong>DOI:</strong> <a href="${cve.doi}" class="doi-link" target="_blank">${cve.doi}</a></p>` : ''}
+                        </div>
+                    `).join('')}
+                `;
+            } else if (data.citations) {
+                nvdContent.innerHTML = `
+                    <h4>استشهادات رسمية للثغرات</h4>
+                    ${Object.entries(data.citations).map(([type, citations]) => `
+                        <div class="nvd-item">
+                            <h5>${type}</h5>
+                            ${citations.map(citation => `
+                                <p><strong>المرجع:</strong> <a href="${citation.doi}" class="doi-link" target="_blank">${citation.doi}</a></p>
+                                <p><strong>الوصف:</strong> ${citation.description}</p>
+                            `).join('')}
+                        </div>
+                    `).join('')}
+                `;
+            } else {
+                nvdContent.innerHTML = `
+                    <h4>معلومات CVE</h4>
+                    <div class="nvd-item">
+                        <h5>${data.id}</h5>
+                        <p><strong>الوصف:</strong> ${data.description}</p>
+                        <p><strong>الخطورة:</strong> ${data.severity}</p>
+                        <p><strong>النتيجة:</strong> ${data.cvss_score}</p>
+                        ${data.doi ? `<p><strong>DOI:</strong> <a href="${data.doi}" class="doi-link" target="_blank">${data.doi}</a></p>` : ''}
+                        ${data.references ? `<p><strong>المراجع:</strong></p>
+                        <ul>${data.references.map(ref => `<li><a href="${ref}" class="doi-link" target="_blank">${ref}</a></li>`).join('')}</ul>` : ''}
+                    </div>
+                `;
+            }
+        }
+
+        async function updateResults() {
+            const response = await fetch('/api/get_domains');
+            const data = await response.json();
+            
+            const resultsDiv = document.getElementById('results-content');
+            let html = '';
+            
+            if (data.domains && data.domains.length > 0) {
+                html += '<h3>النطاقات المكتشفة</h3>';
+                data.domains.forEach(domain => {
+                    html += `
+                        <div class="result-item">
+                            <h4>${domain.keyword}</h4>
+                            <p><strong>DNS A:</strong> ${domain.dns_records?.A?.join(', ') || 'غير متاح'}</p>
+                            <p><strong>MX:</strong> ${domain.dns_records?.MX?.join(', ') || 'غير متاح'}</p>
+                            <p><strong>NS:</strong> ${domain.dns_records?.NS?.join(', ') || 'غير متاح'}</p>
+                        </div>
+                    `;
+                });
+            }
+            
+            if (data.vulnerable_domains && data.vulnerable_domains.length > 0) {
+                html += '<h3>النطاقات المصابة بالثغرات</h3>';
+                data.vulnerable_domains.forEach(domain => {
+                    html += `
+                        <div class="result-item">
+                            <h4>${domain.domain}</h4>
+                            <p><strong>مستوى الخطورة:</strong> ${domain.risk_level}</p>
+                            <p><strong>عدد الثغرات:</strong> ${domain.vulnerabilities?.length || 0}</p>
+                            <div class="vulnerability-list">
+                                ${(domain.vulnerabilities || []).map(vuln => `
+                                    <div class="vulnerability-item ${vuln.severity}">
+                                        <strong>${vuln.type}:</strong> ${vuln.description}
+                                        ${vuln.cve_id ? `<br><span class="cve-id" onclick="getNVDInfo('${vuln.cve_id}')">${vuln.cve_id}</span>` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            resultsDiv.innerHTML = html || '<p>لا توجد نتائج حتى الآن</p>';
+        }
+
+        async function exportResults(format) {
+            const response = await fetch('/api/get_domains');
+            const data = await response.json();
+            
+            const allResults = [
+                ...data.domains || [],
+                ...data.vulnerable_domains || []
+            ];
+            
+            const exportResponse = await fetch('/api/export_results', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    results: allResults,
+                    format: format
+                })
+            });
+
+            const exportData = await exportResponse.json();
+            if (exportData.success) {
+                alert(`تم تصدير النتائج إلى: ${exportData.filename}`);
+            }
+        }
+
+        // تحديث النتائج عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            updateResults();
+            
+            // تحديث الإحصائيات كل 5 ثواني
+            setInterval(() => {
+                fetch('/api/scan_status').then(r => r.json()).then(data => {
+                    document.getElementById('domains-count').textContent = data.domains_found;
+                    document.getElementById('vulnerabilities-count').textContent = data.vulnerabilities_found;
+                });
+                
+                fetch('/api/vulnerability_status').then(r => r.json()).then(data => {
+                    document.getElementById('vulnerabilities-count').textContent = data.vulnerabilities_found;
+                });
+            }, 5000);
+        });
     </script>
 </body>
 </html>
+
+            <div class="tab" onclick="openTab(event, 'nvdSearch')">
+                <i class="fas fa-search"></i>
+                بحث NVD المتقدم
+            </div>
+
+            <!-- محتوى تبويب بحث NVD المتقدم -->
+            <div id="nvdSearch" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-search"></i> بحث NVD المتقدم</h2>
+                    <p>استكشف قاعدة بيانات الثغرات الأمنية الوطنية باستخدام أدوات بحث وتصفية متقدمة</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <h3><i class="fas fa-shield-alt"></i> مميزات البحث المتقدم</h3>
+                    </div>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <i class="fas fa-filter"></i>
+                            <div>
+                                <strong>تصفية متقدمة</strong>
+                                <p>تصفية حسب الخطورة، السنة، المنتج، درجة CVSS، ووجود DOI</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-chart-bar"></i>
+                            <div>
+                                <strong>إحصائيات حية</strong>
+                                <p>عرض إحصائيات CVE حسب السنوات ومستويات الخطورة</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-download"></i>
+                            <div>
+                                <strong>تصدير النتائج</strong>
+                                <p>تصدير النتائج بتنسيق CSV أو JSON للاستخدام البحثي</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-external-link-alt"></i>
+                            <div>
+                                <strong>روابط مباشرة</strong>
+                                <p>روابط مباشرة إلى صفحات CVE الرسمية على NVD</p>
+                            </div>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/hidden_links">
+                                    <i class="fas fa-user-secret"></i>
+                                    الروابط الخفية
+                                </a>
+                            </li>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="window.open('/nvd_search', '_blank')">
+                            <i class="fas fa-external-link-alt"></i> فتح صفحة البحث المتقدم
+                        </button>
+                        <button class="btn btn-secondary" onclick="showNVDStats()">
+                            <i class="fas fa-chart-bar"></i> عرض الإحصائيات
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="stats-container" id="nvdStats" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="totalNVD">-</div>
+                                <div class="stat-label">CVE إجمالي</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="criticalNVD">-</div>
+                                <div class="stat-label">خطير جداً</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="year2024">-</div>
+                                <div class="stat-label">CVE 2024</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+            // وظائف صفحة البحث المتقدم NVD
+            async function showNVDStats() {
+                const statsContainer = document.getElementById('nvdStats');
+                
+                if (statsContainer.style.display === 'none') {
+                    statsContainer.style.display = 'block';
+                    
+                    try {
+                        const response = await fetch('/api/nvd_statistics');
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            document.getElementById('totalNVD').textContent = data.totalCVEs.toLocaleString();
+                            document.getElementById('year2024').textContent = (data.yearlyStats['2024'] || 0).toLocaleString();
+                            
+                            // حساب الثغرات الخطيرة جداً
+                            const criticalCount = Math.floor(data.totalCVEs * 0.05); // تقدير تقريبي
+                            document.getElementById('criticalNVD').textContent = criticalCount.toLocaleString();
+                        }
+                    } catch (error) {
+                        console.error('خطأ في الحصول على إحصائيات NVD:', error);
+                    }
+                } else {
+                    statsContainer.style.display = 'none';
+                }
+            }
+            
+            // ... rest of existing JavaScript ...
+            </script>
+            
+            <style>
+            /* أنماط إضافية لصفحة البحث المتقدم */
+            .stats-container {
+                margin-top: 30px;
+            }
+            
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-top: 20px;
+            }
+            
+            .action-buttons {
+                display: flex;
+                gap: 15px;
+                margin-top: 25px;
+                flex-wrap: wrap;
+            }
+            
+            @media (max-width: 768px) {
+                .action-buttons {
+                    flex-direction: column;
+                }
+                
+                .action-buttons .btn {
+                    width: 100%;
+                    justify-content: center;
+                }
+            }
+            </style>
