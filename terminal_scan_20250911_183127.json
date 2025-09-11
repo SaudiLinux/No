@@ -1,0 +1,15 @@
+{
+  "target": "https://www.israelpost.co.il",
+  "scan_time": "2025-09-11 18:31:27",
+  "domain_info": {
+    "domain": "www.israelpost.co.il",
+    "scheme": "https",
+    "path": ""
+  },
+  "sensitive_files": [],
+  "vulnerabilities": [],
+  "summary": {
+    "total_files": 0,
+    "total_vulnerabilities": 0
+  }
+}

@@ -168,12 +168,8 @@ python scanners/hidden_files_scanner.py
 git pull origin main
 pip install -r requirements.txt --upgrade
 ```
-## معلومات المبرمج
-- **الاسم:** SayerLinux
-- **البريد الإلكتروني:** SayerLinux1@gmail.com
 
 ## الترخيص
-
 
 هذا المشروع مفتوح المصدر للأغراض التعليمية فقط. يرجى احترام القوانين المحلية والدولية عند الاستخدام.
 
@@ -185,5 +181,9 @@ pip install -r requirements.txt --upgrade
 3. تأكد من اختبار التغييرات قبل الإرسال
 
 ---
+
+## معلومات المبرمج
+- **الاسم:** SayerLinux
+- **البريد الإلكتروني:** SayerLinux1@gmail.com
 
 **⚠️ تحذير:** استخدم هذه الأداة بمسؤولية واحترم خصوصية الآخرين وحقوقهم.
